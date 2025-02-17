@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Drum Kit</title>
+</head>
+<body>
+    <div class="keys">
+        <div data-key="a" class="key">
+            <h2>A</h2>
+            <span>CLAP</span>
+        </div>
+        <div data-key="s" class="key">
+            <h2>S</h2>
+            <span>HIHAT</span>
+        </div>
+        <div data-key="d" class="key">
+            <h2>D</h2>
+            <span>KICK</span>
+        </div>
+        <div data-key="f" class="key">
+            <h2>F</h2>
+            <span>OPENHAT</span>
+        </div>
+        <div data-key="g" class="key">
+            <h2>G</h2>
+            <span>BOOM</span>
+        </div>
+        <div data-key="h" class="key">
+            <h2>H</h2>
+            <span>RIDE</span>
+        </div>
+        <div data-key="j" class="key">
+            <h2>J</h2>
+            <span>SNARE</span>
+        </div>
+        <div data-key="k" class="key">
+            <h2>K</h2>
+            <span>TOM</span>
+        </div>
+        <div data-key="l" class="key">
+            <h2>L</h2>
+            <span>TINK</span>
+        </div>
+    </div>
+
+    <audio data-key="a" src="sounds/clap.wav"></audio>
+    <audio data-key="s" src="sounds/hihat.wav"></audio>
+    <audio data-key="d" src="sounds/kick.wav"></audio>
+    <audio data-key="f" src="sounds/openhat.wav"></audio>
+    <audio data-key="g" src="sounds/boom.wav"></audio>
+    <audio data-key="h" src="sounds/ride.wav"></audio>
+    <audio data-key="j" src="sounds/snare.wav"></audio>
+    <audio data-key="k" src="sounds/tom.wav"></audio>
+    <audio data-key="l" src="sounds/tink.wav"></audio>
+</body>
+</html>
+
+<script>
+    window.addEventListener('keydown', event => playSound(event.key))
+
+    function playSound(key) {
+        const audio = document.querySelector(`audio[data-key = '${key}']`)
+        const button = document.querySelector(`.key[data-key = '${key}']`)
+        if(!audio) return;
+        button.classList.add("playing")
+        audio.currentTime = 0;
+        audio.play()
+    }
+
+    const keys = document.querySelectorAll('.key');
+
+    keys.forEach(key => key.addEventListener('mouseover', evt => playSound(evt.target.dataset.key)));
+
+    function removeTransition(e) {
+        if(e.propertyName !== 'transform') return;
+        this.classList.remove("playing")
+    }
+
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
+</script>
+
+<style>
+    html {
+        font-size: 10px;
+        background: url('./back.jpg') bottom center;
+        background-size: cover;
+    }
+    body,html {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+    }
+    .keys {
+        display: flex;
+        flex: 1;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+    }
+    .key {
+        border: .4rem solid black;
+        border-radius: .5rem;
+        margin: 1rem;
+        font-size: 1.5rem;
+        padding: 1rem .5rem;
+        transition: all .07s ease;
+        width: 10rem;
+        text-align: center;
+        color: white;
+        background: rgba(0,0,0,0.4);
+        text-shadow: 0 0 .5rem black;
+    }
+    .playing {
+        transform: scale(1.1);
+        border-color: #ffc600;
+        box-shadow: 0 0 1rem #ffc600;
+    }
+    .key h2 {
+        display: block;
+        font-size: 4rem;
+    }
+    .sound {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: .1rem;
+        color: #ffc600;
+    }
+</style>
